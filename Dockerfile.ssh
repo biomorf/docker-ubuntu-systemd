@@ -1,5 +1,14 @@
-FROM ubuntu:devel
+FROM ubuntu:devel AS systemd
 LABEL maintainer="brett.dellegrazie@gmail.com"
+
+
+### deb proxy
+ARG HTTP_PROXY="http://10.0.2.2:8000"
+### proxy for deb files
+# TODO use vagrant-cachier instead
+RUN echo "Acquire::http::Proxy "\""${HTTP_PROXY}"\"";" \
+  | tee  /etc/apt/apt.conf.d/01deb-proxy
+
 
 ENV container=docker LANG=C.UTF-8
 
@@ -32,3 +41,31 @@ VOLUME ["/sys/fs/cgroup", "/tmp", "/run", "/run/lock"]
 STOPSIGNAL SIGRTMIN+3
 
 CMD ["/sbin/init", "--log-target=journal"]
+
+
+FROM systemd AS sshd
+
+# Install packages needed for SSH and interactive OS
+RUN apt-get update && \
+    yes | unminimize && \
+    apt-get -y install \
+        openssh-server \
+        && \
+    apt-get -qq clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+RUN apt-get update --yes
+RUN apt-get install --yes --no-install-recommends \
+  ssh \
+  ;
+
+# Enable ssh for vagrant
+RUN systemctl enable ssh.service;
+EXPOSE 22
+
+RUN sed -i -e 's/\(UsePAM \)yes/\1 no/' /etc/ssh/sshd_config
+
+### if threre is no systemd or service
+RUN mkdir /var/run/sshd
+
