@@ -4,7 +4,10 @@
 
 image="bdellegrazie_o"
 
-docker build --tag "${image}" .
+docker buildx build \
+       --file Dockerfile.ssh \
+       --tag "${image}" \
+       .
 
 docker run \
 	-d \

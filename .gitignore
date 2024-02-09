@@ -1,3 +1,7 @@
+
 *.swp
-*.swo
-*~
+
+
+vagrant_var/
+.vagrant/
+tmp/
