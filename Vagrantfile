@@ -1,9 +1,27 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-DOCKER_GID = `stat -c '%g' /var/run/docker.sock | tr -d '\n'`
-# TODO test on Windows PS
-#DOCKER_GID = `stat -c '%g' //var/run/docker.sock | tr -d '\n'`
+# https://stackoverflow.com/questions/72151630/how-to-run-a-bash-script-on-wsl-with-powershell/72205311#72205311
+# https://stackoverflow.com/questions/26811089/vagrant-how-to-have-host-platform-specific-provisioning-steps
+if Vagrant::Util::Platform.windows?
+    # is windows
+    puts "Vagrant launched from windows."
+    # TODO test on Windows PS
+    DOCKER_GID = `wsl.exe stat -c '%g' //var/run/docker.sock | tr -d '\n'`
+elsif Vagrant::Util::Platform.darwin?
+    # is mac
+    puts "Vagrant launched from mac."
+elsif Vagrant::Util::Platform.linux?
+    # is linux
+    puts "Vagrant launched from linux."
+    DOCKER_GID = `stat -c '%g' /var/run/docker.sock | tr -d '\n'`
+    puts "host: /var/run/docker.sock is owned by GID #{DOCKER_GID}"
+else
+    # is some other OS
+    puts "Vagrant launched from unknown platform."
+
+end
+
 
 Vagrant.configure(2) do |config|
   config.vm.define "vagrant.systemd", autostart: true do |conf|
