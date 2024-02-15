@@ -66,7 +66,6 @@ FROM systemd AS sshd
 
 # Install packages needed for SSH and interactive OS
 RUN apt-get update --yes && \
-    yes | unminimize && \
     apt-get -y install \
         openssh-server \
         passwd \
@@ -76,6 +75,8 @@ RUN apt-get update --yes && \
         wget \
         vim-tiny \
         ;
+    ### NOTE libc fails to install during unminimize...
+    #yes | unminimize && \
 
 RUN apt-get install --yes --no-install-recommends \
   ssh \
