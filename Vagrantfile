@@ -26,7 +26,7 @@ end
 Vagrant.configure(2) do |config|
   config.vm.define "vagrant.systemd", autostart: true do |conf|
     conf.vm.hostname = "vagrant.systemd"
-  
+
     ############################################################
     # Provider for Docker on Intel or ARM (aarch64)
     ############################################################
@@ -39,17 +39,17 @@ Vagrant.configure(2) do |config|
       docker.build_args = ["--build-arg", "DOCKER_GID=#{DOCKER_GID}"]
       docker.remains_running = true
       docker.has_ssh = true
-      
+
       docker.privileged = true
       docker.volumes = ["/sys/fs/cgroup:/sys/fs/cgroup:rw"]
       docker.create_args = ["-t", "--cgroupns=host", "--security-opt", "seccomp=unconfined", "--tmpfs", "/tmp", "--tmpfs", "/run", "--tmpfs", "/run/lock", "--mount", "type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock"]
         #"--mount", "type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock",
         #"-v", "/sys/fs/cgroup:/sys/fs/cgroup:rw",
-      
+
       # Uncomment to force arm64 for testing images on Intel
-      # docker.create_args = ["--platform=linux/arm64", "--cgroupns=host"]     
+      # docker.create_args = ["--platform=linux/arm64", "--cgroupns=host"]
     end
-  
+
     conf.vm.boot_timeout = 600
     conf.vm.synced_folder ".", "/vagrant_data"
     # Install Docker and pull an image

@@ -9,8 +9,8 @@ LABEL maintainer="brett.dellegrazie@gmail.com"
 ARG HTTP_PROXY="http://10.0.2.2:8000"
 ### proxy for deb files
 # TODO use vagrant-cachier instead
-RUN echo "Acquire::http::Proxy "\""${HTTP_PROXY}"\"";" \
-  | tee  /etc/apt/apt.conf.d/01deb-proxy
+#RUN echo "Acquire::http::Proxy "\""${HTTP_PROXY}"\"";" \
+#  | tee  /etc/apt/apt.conf.d/01deb-proxy
 
 
 ENV DEBIAN_FRONTEND noninteractive
