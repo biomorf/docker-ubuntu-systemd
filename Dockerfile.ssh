@@ -22,7 +22,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Enable all repositories
 RUN sed -i 's/# deb/deb/g' /etc/apt/sources.list
 
+    ### NOTE unminimize must be the first thing  you install,
+    ### otherwise libc fails to install during unminimize...
 RUN apt-get update --yes && \
+    yes | unminimize && \
     apt-get install --no-install-recommends -y \
     dbus systemd systemd-cron rsyslog iproute2 python3 python3-apt sudo bash ca-certificates && \
     apt-get clean && \
@@ -75,8 +78,6 @@ RUN apt-get update --yes && \
         wget \
         vim-tiny \
         ;
-    ### NOTE libc fails to install during unminimize...
-    #yes | unminimize && \
 
 RUN apt-get install --yes --no-install-recommends \
   ssh \
