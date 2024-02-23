@@ -41,10 +41,11 @@ Vagrant.configure(2) do |config|
       docker.has_ssh = true
 
       docker.privileged = true
-      docker.volumes = ["/sys/fs/cgroup:/sys/fs/cgroup:rw"]
-      docker.create_args = ["-t", "--cgroupns=host", "--security-opt", "seccomp=unconfined", "--tmpfs", "/tmp", "--tmpfs", "/run", "--tmpfs", "/run/lock", "--mount", "type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock"]
+      docker.volumes = ["//sys/fs/cgroup:/sys/fs/cgroup:rw"]
+      docker.create_args = ["-t", "--security-opt", "seccomp=unconfined", "--tmpfs", "/tmp", "--tmpfs", "/run", "--tmpfs", "/run/lock", "--mount", "type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock"]
         #"--mount", "type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock",
         #"-v", "/sys/fs/cgroup:/sys/fs/cgroup:rw",
+        #"--cgroupns=host",
 
       # Uncomment to force arm64 for testing images on Intel
       # docker.create_args = ["--platform=linux/arm64", "--cgroupns=host"]
