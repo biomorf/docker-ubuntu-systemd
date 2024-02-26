@@ -15,7 +15,7 @@ elsif Vagrant::Util::Platform.linux?
     # is linux
     puts "Vagrant launched from linux."
     DOCKER_GID = `stat -c '%g' /var/run/docker.sock | tr -d '\n'`
-    puts "host: /var/run/docker.sock is owned by GID #{DOCKER_GID}"
+    puts "vagrant host: /var/run/docker.sock is owned by GID #{DOCKER_GID}"
 else
     # is some other OS
     puts "Vagrant launched from unknown platform."
@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
 
       docker.privileged = true
       docker.volumes = ["//sys/fs/cgroup:/sys/fs/cgroup:rw"]
-      docker.create_args = ["-t", "--security-opt", "seccomp=unconfined", "--tmpfs", "/tmp", "--tmpfs", "/run", "--tmpfs", "/run/lock", "--mount", "type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock"]
+      docker.create_args = ["-t", "--cgroupns=host", "--security-opt", "seccomp=unconfined", "--tmpfs", "/tmp", "--tmpfs", "/run", "--tmpfs", "/run/lock", "--mount", "type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock"]
         #"--mount", "type=bind,source=//var/run/docker.sock,target=/var/run/docker.sock",
         #"-v", "/sys/fs/cgroup:/sys/fs/cgroup:rw",
         #"--cgroupns=host",
