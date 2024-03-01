@@ -3,5 +3,5 @@
 
 
 vagrant_var/
-.vagrant/*
+.vagrant/
 tmp/

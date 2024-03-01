@@ -8,6 +8,7 @@ if Vagrant::Util::Platform.windows?
     puts "Vagrant launched from windows."
     # TODO test on Windows PS
     DOCKER_GID = `wsl.exe stat -c '%g' //var/run/docker.sock | tr -d '\n'`
+    puts "vagrant host: /var/run/docker.sock is owned by GID #{DOCKER_GID}"
 elsif Vagrant::Util::Platform.darwin?
     # is mac
     puts "Vagrant launched from mac."
