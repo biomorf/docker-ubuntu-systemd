@@ -25,17 +25,18 @@ end
 
 
 Vagrant.configure(2) do |config|
-  config.vm.define "vagrant.systemd", autostart: true do |conf|
-    conf.vm.hostname = "vagrant.systemd"
+  config.vm.define "vagrant.docker.systemd", autostart: true do |conf|
+    conf.vm.hostname = "vagrant.docker.systemd"
 
     ############################################################
     # Provider for Docker on Intel or ARM (aarch64)
     ############################################################
     conf.vm.provider :docker do |docker, override|
       override.vm.box = nil
-      docker.name = "vagrant.systemd"
+      docker.name = "vagrant.docker.systemd"
       #docker.image = ""
       docker.build_dir = "."
+      # Docker
       docker.dockerfile = "Dockerfile.ssh"
       docker.build_args = ["--build-arg", "DOCKER_GID=#{DOCKER_GID}"]
       docker.remains_running = true
